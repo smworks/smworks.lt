@@ -47,7 +47,7 @@ $('#category').change(function () {
     $('.list-item').each(function () {
         var item = $(this);
         var category = item.data('category');
-        if (category == value || value == -1) {
+        if (category === value || value === -1) {
             item.show();
         } else {
             item.hide();
@@ -64,12 +64,12 @@ $('.menu').on('click', function (e) {
 $('.page-link').on('click', function (e) {
     e.preventDefault();
     var id = this.dataset['id'];
-    var summary = this.dataset['summary'];
+    //var summary = this.dataset['summary'];
     var title = this.dataset['title'];
     var d = new Date(this.dataset['date'] * 1000);
     var edit = this.dataset['edit'];
     var editLink = $('#edit-link');
-    if (edit == 1) {
+    if (edit === 1) {
         editLink.show();
         editLink.prop('href', '/index.php?editor=true&pageId=' + id);
     } else {

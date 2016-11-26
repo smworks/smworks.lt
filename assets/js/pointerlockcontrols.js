@@ -27,7 +27,7 @@ var PointerLockControls = function (camera, cannonBody, keyPressAction) {
     var running = false;
 
     var startx = 0;
-    var dist = 0;
+    //var dist = 0;
 
     //var contactNormal = new CANNON.Vec3(); // Normal in the contact, pointing *out* of whatever the player touched
     //var upAxis = new CANNON.Vec3(0, 1, 0);
@@ -149,7 +149,7 @@ var PointerLockControls = function (camera, cannonBody, keyPressAction) {
     };
 
     var touchEnd = function (e) {
-        var touchobj = e.changedTouches[0]; // reference first touch point for this event
+        //var touchobj = e.changedTouches[0]; // reference first touch point for this event
         //statusdiv.innerHTML = 'Status: touchend<br> Resting x coordinate: ' + touchobj.clientX + 'px'
         e.preventDefault();
         //alert('touchEnd');
@@ -168,10 +168,10 @@ var PointerLockControls = function (camera, cannonBody, keyPressAction) {
         return yawObject;
     };
 
-    this.getDirection = function (targetVec) {
-        targetVec.set(0, 0, -1);
-        quat.multiplyVector3(targetVec);
-    };
+    //this.getDirection = function (targetVec) {
+    //    targetVec.set(0, 0, -1);
+    //    quat.multiplyVector3(targetVec);
+    //};
 
     // Moves the camera to the Cannon.js object position and adds velocity to the object if the run key is down
     var inputVelocity = new THREE.Vector3();
