@@ -1,0 +1,20 @@
+RewriteEngine On
+
+#RewriteRule pages/([a-z0-9_-]+)/([a-z0-9_-]+)$ /index.php?pageId=$1&op=$2
+
+RewriteCond %{REQUEST_URI} rest/images/
+RewriteRule ^rest/images/([a-z0-9_-]*)$ /index.php?imageId=$1&image=true
+
+RewriteCond %{REQUEST_URI} rest/pages/
+RewriteRule ^rest/pages/([a-z0-9_-]+)$ /index.php?pageId=$1&page=true
+
+RewriteCond %{REQUEST_URI} pages/
+RewriteRule ^pages/([a-z0-9_-]+)$ /index.php?pageId=$1
+
+RewriteRule admin$ index.php?admin=true
+
+ErrorDocument 400 /index.php?error=400&message=Bad%20request
+ErrorDocument 401 /index.php?error=401&message=Authorization%20Required
+ErrorDocument 403 /index.php?error=403&message=Forbidden
+ErrorDocument 404 /index.php?error=404&message=Page%20Not%20Found
+ErrorDocument 500 /index.php?error=500&message=Internal%20Server%20Error

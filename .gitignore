@@ -1,0 +1,19 @@
+# Ignore everything at first
+/*
+# Track git setting files
+!.gitattributes
+!.gitignore
+# Main project files
+!assets/
+!core/
+!.htaccess
+!about.html
+!contacts.php
+!content.php
+!facebook.php
+!index.php
+!robots.txt
+# Ignore config file
+core/config.php
+# Ignore about resources
+assets/about/*
