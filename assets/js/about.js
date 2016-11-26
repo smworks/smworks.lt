@@ -21,7 +21,7 @@ if (!Modernizr.canvas) {
 
 THREE.DefaultLoadingManager.onProgress = function (item, loaded, total) {
     console.log(item, loaded, total);
-    if (loaded == total) {
+    if (loaded === total) {
         setupLockPoint();
     }
 };
@@ -45,7 +45,7 @@ var materials = {
 };
 
 var keyPressAction = function (key) {
-    if (key == 70 && actionCallback != null) {
+    if (key === 70 && actionCallback != null) {
         actionCallback();
     }
 };
@@ -243,6 +243,20 @@ function createBuilding() {
     });
 }
 
+function playGarageSound(begin, end) {
+    var sound = document.createElement('audio');
+    sound.setAttribute('preload', 'none');
+    sound.setAttribute('src', 'assets/about/garage_door.mp3');
+    sound.volume = 0.5;
+    sound.play();
+    sound.addEventListener('ended', function () {
+        begin();
+    }, false);
+    sound.addEventListener('play', function () {
+        end();
+    }, false);
+}
+
 function addGarageDoor() {
     var openGates = false;
     var closeGates = false;
@@ -261,35 +275,22 @@ function addGarageDoor() {
             if (transition) {
                 return;
             }
-
             if (!openGates) {
                 transition = true;
-                var sound = document.createElement('audio');
-                sound.setAttribute('preload', 'none');
-                sound.setAttribute('src', 'assets/about/garage_door.mp3');
-                sound.volume = 0.5;
-                sound.play();
-                sound.addEventListener('ended', function () {
+                playGarageSound(function () {
                     transition = false;
-                }, false);
-                sound.addEventListener('play', function () {
+                }, function () {
                     closeGates = false;
                     openGates = true;
-                }, false);
+                });
             } else if (!closeGates) {
                 transition = true;
-                var sound = document.createElement('audio');
-                sound.setAttribute('preload', 'none');
-                sound.setAttribute('src', 'assets/about/garage_door.mp3');
-                sound.volume = 0.5;
-                sound.play();
-                sound.addEventListener('ended', function () {
+                playGarageSound(function () {
                     transition = false;
-                }, false);
-                sound.addEventListener('play', function () {
+                }, function () {
                     closeGates = true;
                     openGates = false;
-                }, false);
+                });
             }
         });
 
