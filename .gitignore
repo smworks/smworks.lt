@@ -13,6 +13,7 @@
 !facebook.php
 !index.php
 !robots.txt
+!README.md
 # Ignore config file
 core/config.php
 # Ignore about resources
