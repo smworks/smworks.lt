@@ -15,12 +15,11 @@ var locations = [];
 var ambientSound = document.createElement('audio');
 
 if (!Modernizr.canvas) {
-    alert('Your browser doesn\'t support HTML5 canvas :(');
+    document.body.innerHTML = '<p>Your browser doesn\'t support HTML5 canvas :(</p>';
     throw new Error('Your browser doesn\'t support HTML5 canvas');
 }
 
 THREE.DefaultLoadingManager.onProgress = function (item, loaded, total) {
-    console.log(item, loaded, total);
     if (loaded === total) {
         setupLockPoint();
     }
@@ -143,34 +142,9 @@ function addSpotLight() {
     pointLight.position.x = 0;
     pointLight.position.y = 4;
     pointLight.position.z = 0;
-    //visualScene.add(new THREE.PointLightHelper(pointLight, 3));
-    //var sphereGeometry = new THREE.SphereGeometry(1, 16, 16);
-    //var sphere = new THREE.Mesh(sphereGeometry, materials.wall);
-    //var sphereBody = new CANNON.Body({
-    //    mass: 5, // kg
-    //    position: new CANNON.Vec3(0, 1, 0), // m
-    //    shape: new CANNON.Sphere(1)
-    //});
-
     addSceneObject(pointLight, null, null);
     addSceneObject(new THREE.AmbientLight(0xffffff, 0.2), null, null);
-
-    //addSceneObject(sphere, null, function () {
-    //    update(sphere, pointLight);
-    //});
 }
-
-//function addCube() {
-//    var boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-//    var cube = new THREE.Mesh(boxGeometry, materials.green);
-//    var cubeBody = new CANNON.Body({
-//        mass: 5, // kg
-//        position: new CANNON.Vec3(0.4, 10, 0), // m
-//        shape: new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 0.5))
-//    });
-//
-//    addSceneObject(cube, cubeBody, null);
-//}
 
 function addBox(material, width, height, depth, x, y, z, updateCallback) {
     var geometry = new THREE.BoxGeometry(width, height, depth);
@@ -373,9 +347,8 @@ function setupLockPoint() {
         menu.style.display = controls.enabled ? 'none' : 'block';
     };
 
-    var pointerLockError = function (event) {
-        // We have an error
-        alert('Error with PointerLock API:' + JSON.stringify(event));
+    var pointerLockError = function () {
+        document.body.innerHTML += '<div>There was a problem while trying to lock the pointer</div>';
     };
 
     document.addEventListener('pointerlockchange', pointerLockChange, false);
@@ -393,7 +366,6 @@ function prepareScene() {
     visualScene.fog = new THREE.Fog(0x000000, 10, 100);
     addCamera();
     addSkyBox();
-    //addCube();
     addSpotLight();
     addGround();
     createBuilding();

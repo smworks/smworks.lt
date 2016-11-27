@@ -2,6 +2,7 @@
 var $pageWindow = $('#page-window');
 var $pageContent = $('#page-content');
 var $pageTitle = $('#page-title');
+var $contacts = $('#contacts');
 var $contactForm = $('#contact-form');
 var $socialControls = $('#social');
 // Global variables
@@ -16,11 +17,13 @@ $contactForm.on('submit', function (e) {
     };
     $.post('/contacts.php', params)
         .done(function () {
-            alert('Message sent');
             $('input, textarea, button', $contactForm).prop('disabled', true);
+            $('.panel-body', $contacts).html('<div class="alert alert-success">' +
+                '<strong>Success! </strong>Message sent.</div>');
         })
         .fail(function () {
-            alert('Message not sent');
+            $('.panel-body', $contacts).html('<div class="alert alert-danger">' +
+                '<strong>Failure! </strong>Message was not sent.</div>');
         })
 });
 
@@ -57,14 +60,13 @@ $('#category').change(function () {
 
 $('.menu').on('click', function (e) {
     e.preventDefault();
-    var id = this.getAttribute('href');
+    var id = this.dataset['id'];
     document.getElementById(id).scrollIntoView();
 });
 
 $('.page-link').on('click', function (e) {
     e.preventDefault();
     var id = this.dataset['id'];
-    //var summary = this.dataset['summary'];
     var title = this.dataset['title'];
     var d = new Date(this.dataset['date'] * 1000);
     var edit = this.dataset['edit'];
