@@ -125,12 +125,10 @@ class Content extends Singleton
     private function replaceTags($page)
     {
         $search = array(
-            '{TITLE}',
-            '{ASSETS}',
+            '{TITLE}'
         );
         $replace = array(
-            TITLE,
-            '/assets'
+            TITLE
         );
 
         $page = Facebook::getInstance()->getMetaTagHtml($page);
