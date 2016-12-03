@@ -46,7 +46,7 @@ function addSocialControls(id) {
 }
 
 $('#category').change(function () {
-    var value = this.value;
+    var value = parseInt(this.value);
     $('.list-item').each(function () {
         var item = $(this);
         var category = item.data('category');
