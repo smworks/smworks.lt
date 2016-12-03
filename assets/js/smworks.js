@@ -79,6 +79,7 @@ $('.page-link').on('click', function (e) {
     }
     $pageTitle.html(title
         + ' (' + d.getFullYear() + ' ' + ('0' + (d.getMonth() + 1)).slice(-2) + ' ' + ('0' + d.getDate()).slice(-2) + ')');
+    document.body.style.overflow = 'hidden';
     $pageWindow.modal('show');
 
     $.get('/rest/pages/' + id).done(function (data) {
@@ -100,6 +101,7 @@ $('.page-link').on('click', function (e) {
 });
 
 $pageWindow.on('hidden.bs.modal', function () {
+    document.body.style.overflow = 'visible';
     $pageContent.html('<div class="pre-loader"></div>');
     $socialControls.html('');
     if (onCancelGoToIndex) {
