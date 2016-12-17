@@ -45,7 +45,7 @@ class Facebook extends Singleton
 
     public function setImage($image)
     {
-        $this->tags[FB_IMAGE] = $image;
+        $this->tags[FB_IMAGE] = 'http://smworks.lt/uploads/' . $image;
         return $this;
     }
 

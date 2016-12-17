@@ -106,8 +106,9 @@ class Content extends Singleton
         if (isset($_GET['pageId']) && ctype_digit($_GET['pageId'])) {
             $fbAddress = 'http://' . $_SERVER['HTTP_HOST'] . '/pages/' . $_GET['pageId'];
             $fbType = 'article';
-            Facebook::getInstance()->setImage(Utils::decodeHTML(DB::getInstance()->getFirstColumn(
-                'SELECT thumbnail FROM pages WHERE id=' . $_GET['pageId'])));
+            $data = DB::getInstance()->getObject('SELECT thumbnail, summary FROM pages WHERE id=' . $_GET['pageId']);
+            Facebook::getInstance()->setImage(Utils::decodeHTML($data->thumbnail));
+            Facebook::getInstance()->setDescription($data->summary);
         }
         Facebook::getInstance()->setUrl($fbAddress)->setType($fbType);
         echo str_replace('{CATEGORIES}', $this->getCategoriesSelectHtml(), $this->replaceTags($page));

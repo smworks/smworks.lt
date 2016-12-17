@@ -71,7 +71,7 @@ $('.page-link').on('click', function (e) {
     var d = new Date(this.dataset['date'] * 1000);
     var edit = this.dataset['edit'];
     var editLink = $('#edit-link');
-    if (edit === 1) {
+    if (edit === '1') {
         editLink.show();
         editLink.prop('href', '/index.php?editor=true&pageId=' + id);
     } else {
