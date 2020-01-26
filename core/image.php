@@ -13,7 +13,7 @@ class Image extends Singleton
         if (!file_exists('uploads/' . $fileName)) {
             file_put_contents('uploads/' . $fileName, $fileContent);
         }
-        return $fileName;
+        return json_encode(array('location' => 'uploads/' . $fileName), JSON_UNESCAPED_SLASHES);
     }
 
     public function load($name, $width, $height)

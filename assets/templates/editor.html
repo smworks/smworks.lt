@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,7 +9,7 @@
     <meta name="description" content="Personal website">
     <meta name="author" content="Martynas Šustavičius">
     <title>{TITLE}</title>
-    <link rel='shortcut icon' href='/assets/img/smworks.png' type='image/x-icon'/>
+    <link rel='shortcut icon' href='/assets/img/smworks.png' type='image/x-icon' />
     <!-- Bootstrap core CSS -->
     <link href="/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
@@ -24,13 +25,15 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="/assets/js/ie10-viewport-bug-workaround.js"></script>
     <!-- TinyMCE visual editor -->
-    <script src="/assets/tinymce/tinymce.min.js"></script>
+    <script src="https://cdn.tiny.cloud/1/iauvkld4hl8avhpjxrivgsb46mrju3tph2cce2qexh0xw6o4/tinymce/5/tinymce.min.js"
+        referrerpolicy="origin"></script>
     <script>
         tinymce.init({
             selector: '#editor',
             editor_selector: "tinyMCE",
             height: 500,
-            theme: 'modern',
+            images_upload_url: '/rest/images/',
+            automatic_uploads: false,
             plugins: [
                 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
                 'searchreplace wordcount visualblocks visualchars code fullscreen',
@@ -41,8 +44,8 @@
             toolbar2: 'print preview media | forecolor backcolor emoticons save codesample',
             image_advtab: true,
             templates: [
-                {title: 'Test template 1', content: 'Test 1'},
-                {title: 'Test template 2', content: 'Test 2'}
+                { title: 'Test template 1', content: 'Test 1' },
+                { title: 'Test template 2', content: 'Test 2' }
             ],
             content_css: [
                 '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
@@ -60,190 +63,193 @@
         });
     </script>
 </head>
+
 <body>
 
-<section class="container content-center">
+    <section class="container content-center">
 
-    <div class="panel panel-default content-left">
-        <div class="panel-heading">
-            <span id="id" data-id="{ID}">Page id: {ID}</span>
-        </div>
-        <div class="panel-body">
-            <div class="form-group">
-                <label for="title">Title</label>
-                <input type="text" class="form-control" id="title" value="{ARTICLE_TITLE}">
+        <div class="panel panel-default content-left">
+            <div class="panel-heading">
+                <span id="id" data-id="{ID}">Page id: {ID}</span>
             </div>
-            <div class="form-group">
-                <label for="summary">Summary</label>
-                <input type="text" class="form-control" id="summary" value="{SUMMARY}">
-            </div>
-            <div class="form-group">
-                <label for="thumbnail">Thumbnail</label>
-                <div class="input-group">
-                    <input id="thumbnail" class="form-control" value="{THUMBNAIL}" aria-describedby="browse-button"/>
-                    <span class="input-group-btn" id="browse-button">
-                        <label class="btn btn-default btn-file">
-                            Browse <input id="thumbnail-file" type="file" style="display: none;">
-                        </label>
-                    </span>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" value="{ARTICLE_TITLE}">
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="category">Category</label>
-                <select id="category" class="form-control">
-                    {CATEGORIES}
-                </select>
-            </div>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label><input id="visible" type="checkbox" {VISIBLE}>Visible</label>
+                <div class="form-group">
+                    <label for="summary">Summary</label>
+                    <input type="text" class="form-control" id="summary" value="{SUMMARY}">
                 </div>
-            </div>
-        </div>
-        <div class="panel-footer">
-            <a class="btn btn-default" href="http://smworks.lt">Home</a>
-            <button onclick="save()" type="button" class="btn btn-default">Save</button>
-            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#confirm-delete">Delete
-            </button>
-        </div>
-    </div>
-
-    <div id="editor" class="tinyMCE">{CONTENT}</div>
-
-    <div id="preloader" class="modal fade" tabindex="-1">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 id="page-title" class="modal-title"></h4>
-                </div>
-                <div class="modal-body">
-                    <div id="page-content">
-                        <div class="pre-loader"></div>
+                <div class="form-group">
+                    <label for="thumbnail">Thumbnail</label>
+                    <div class="input-group">
+                        <input id="thumbnail" class="form-control" value="{THUMBNAIL}"
+                            aria-describedby="browse-button" />
+                        <span class="input-group-btn" id="browse-button">
+                            <label class="btn btn-default btn-file">
+                                Browse <input id="thumbnail-file" type="file" style="display: none;">
+                            </label>
+                        </span>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="category" class="form-control">
+                        {CATEGORIES}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label><input id="visible" type="checkbox" {VISIBLE}>Visible</label>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <a class="btn btn-default" href="http://smworks.lt">Home</a>
+                <button onclick="save()" type="button" class="btn btn-default">Save</button>
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#confirm-delete">Delete
+                </button>
+            </div>
+        </div>
+
+        <div id="editor" class="tinyMCE">{CONTENT}</div>
+
+        <div id="preloader" class="modal fade" tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 id="page-title" class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="page-content">
+                            <div class="pre-loader"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    Warning!
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to delete this page?
-                </div>
-                <div class="modal-footer">
-                    <button id='delete-page' type="button" class="btn btn-danger btn-ok" data-dismiss="modal">Yes
-                    </button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+        <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Warning!
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this page?
+                    </div>
+                    <div class="modal-footer">
+                        <button id='delete-page' type="button" class="btn btn-danger btn-ok" data-dismiss="modal">Yes
+                        </button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-</section>
-<script>
+    </section>
+    <script>
 
-    $('#confirm-delete .modal-footer #delete-page').on('click', function () {
-        del();
-    });
-
-    $('#thumbnail-file').change(function () {
-        var preloader = $('#preloader');
-        preloader.modal({
-            backdrop: 'static',
-            keyboard: false
+        $('#confirm-delete .modal-footer #delete-page').on('click', function () {
+            del();
         });
-        var formData = new FormData();
-        formData.append('file', $('#thumbnail-file')[0].files[0]);
 
-        $.ajax({
-            url: '/rest/images/',
-            type: 'POST',
-            data: formData,
-            processData: false,  // tell jQuery not to process the data
-            contentType: false  // tell jQuery not to set contentType
-        }).fail(function (xhr) {
-            alert(xhr.responseText);
-        }).done(function (data) {
-            $('#thumbnail').val(data);
-        }).always(function () {
-            preloader.modal('hide');
-        });
-    });
+        $('#thumbnail-file').change(function () {
+            var preloader = $('#preloader');
+            preloader.modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+            var formData = new FormData();
+            formData.append('file', $('#thumbnail-file')[0].files[0]);
 
-    function save() {
-        var preloader = $('#preloader');
-        preloader.modal({
-            backdrop: 'static',
-            keyboard: false
+            $.ajax({
+                url: '/rest/images/',
+                type: 'POST',
+                data: formData,
+                processData: false,  // tell jQuery not to process the data
+                contentType: false  // tell jQuery not to set contentType
+            }).fail(function (xhr) {
+                alert(xhr.responseText);
+            }).done(function (data) {
+                $('#thumbnail').val(JSON.parse(data).location.replace(/uploads\//gi, ''));
+            }).always(function () {
+                preloader.modal('hide');
+            });
         });
-        var id = $('#id').data('id');
-        if (id == -1) {
-            insertNewPage(preloader, id);
-        } else {
-            updatePage(preloader, id);
+
+        function save() {
+            var preloader = $('#preloader');
+            preloader.modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+            var id = $('#id').data('id');
+            if (id == -1) {
+                insertNewPage(preloader, id);
+            } else {
+                updatePage(preloader, id);
+            }
         }
-    }
 
-    function getFormData() {
-        return {
-            content: tinymce.get('editor').getContent(),
-            summary: $('#summary').val(),
-            title: $('#title').val(),
-            thumbnail: $('#thumbnail').val(),
-            category: $('#category').find('option:selected').val(),
-            visible: $('#visible').prop('checked') ? 1 : 0
-        };
-    }
-    function insertNewPage(preloader, id) {
-        $.ajax({
-            type: 'POST',
-            url: '/rest/pages/' + id,
-            data: getFormData()
-        }).fail(function (xhr) {
-            alert(xhr.responseText);
-        }).always(function () {
-            preloader.modal('hide');
-        }).done(function (data) {
-            window.location.replace("index.php");
-            id.val(data);
-        });
-    }
-    function updatePage(preloader, id) {
-        $.ajax({
-            type: 'PUT',
-            url: '/rest/pages/' + id,
-            data: getFormData()
-        }).fail(function (xhr) {
-            alert(xhr.responseText);
-        }).always(function () {
-            preloader.modal('hide');
-        }).done(function () {
-        });
-    }
+        function getFormData() {
+            return {
+                content: tinymce.get('editor').getContent(),
+                summary: $('#summary').val(),
+                title: $('#title').val(),
+                thumbnail: $('#thumbnail').val(),
+                category: $('#category').find('option:selected').val(),
+                visible: $('#visible').prop('checked') ? 1 : 0
+            };
+        }
+        function insertNewPage(preloader, id) {
+            $.ajax({
+                type: 'POST',
+                url: '/rest/pages/' + id,
+                data: getFormData()
+            }).fail(function (xhr) {
+                alert(xhr.responseText);
+            }).always(function () {
+                preloader.modal('hide');
+            }).done(function (data) {
+                window.location.replace("index.php");
+                id.val(data);
+            });
+        }
+        function updatePage(preloader, id) {
+            $.ajax({
+                type: 'PUT',
+                url: '/rest/pages/' + id,
+                data: getFormData()
+            }).fail(function (xhr) {
+                alert(xhr.responseText);
+            }).always(function () {
+                preloader.modal('hide');
+            }).done(function () {
+            });
+        }
 
-    function del() {
-        var preloader = $('#preloader');
-        preloader.modal({
-            backdrop: 'static',
-            keyboard: false
-        });
-        $.ajax({
-            type: 'DELETE',
-            url: 'rest/pages/' + $('#id').data('id'),
-        }).fail(function (xhr) {
-            alert(xhr.responseText);
-        }).done(function () {
-            window.location.replace("index.php");
-        }).always(function () {
-            preloader.modal('hide');
-        });
-    }
-</script>
+        function del() {
+            var preloader = $('#preloader');
+            preloader.modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+            $.ajax({
+                type: 'DELETE',
+                url: 'rest/pages/' + $('#id').data('id'),
+            }).fail(function (xhr) {
+                alert(xhr.responseText);
+            }).done(function () {
+                window.location.replace("index.php");
+            }).always(function () {
+                preloader.modal('hide');
+            });
+        }
+    </script>
 </body>
+
 </html>
