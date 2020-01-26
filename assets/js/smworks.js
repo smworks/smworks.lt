@@ -1,3 +1,7 @@
+// Set starting history point
+console.log(`Loaded page. History size: ${window.history.length}`)
+window.history.replaceState({}, window.document.title, window.location.href);
+console.log(`Loaded page. History size after replace: ${window.history.length}`)
 // DOM elements
 var $pageWindow = $('#page-window');
 var $pageContent = $('#page-content');
@@ -6,7 +10,7 @@ var $contacts = $('#contacts');
 var $contactForm = $('#contact-form');
 var $socialControls = $('#social');
 // Global variables
-var onCancelGoToIndex = false;
+var onCancelGoToIndex = true;
 var isFBReady = false;
 
 $contactForm.on('submit', function (e) {
@@ -64,24 +68,57 @@ $('.menu').on('click', function (e) {
     document.getElementById(id).scrollIntoView();
 });
 
+// Switcheroo!
+window.addEventListener('popstate', function (event) {
+    let data = event.state;
+    let isVisible = $pageWindow.is(':visible');
+    console.log(`Data: ${JSON.stringify(data)}. Is modal visible: ${isVisible} History lenght: ${window.history.length}`)
+    if (data != null) {
+        if (data.id != null) {
+            goToPage(data);
+        } else {
+            if (isVisible) {
+                onCancelGoToIndex = false;
+                $pageWindow.modal('hide');
+            }
+        }
+    }
+});
+
 $('.page-link').on('click', function (e) {
+    console.log(`Article click triggered`);
     e.preventDefault();
-    var id = this.dataset['id'];
-    var title = this.dataset['title'];
-    var d = new Date(this.dataset['date'] * 1000);
-    var edit = this.dataset['edit'];
+    goToPage(this.dataset, true);
+});
+
+function goToPage(dataset, pushToHistory = false) {
+    var id = dataset['id'];
+    var title = dataset['title'];
+    var d = new Date(dataset['date'] * 1000);
+    var edit = dataset['edit'];
     var editLink = $('#edit-link');
+    onCancelGoToIndex = true
+    if (pushToHistory) {
+        console.log("Pushing history state");
+        window.history.pushState({
+            id: id,
+            title: title,
+            date: dataset['date'],
+            edit: edit
+        }, title, "/pages/" + id);
+        console.log(`Data: ${JSON.stringify(dataset)}. History lenght: ${window.history.length}`)
+    }
     if (edit === '1') {
         editLink.show();
         editLink.prop('href', '/index.php?editor=true&pageId=' + id);
-    } else {
+    }
+    else {
         editLink.hide();
     }
     $pageTitle.html(title
         + ' (' + d.getFullYear() + ' ' + ('0' + (d.getMonth() + 1)).slice(-2) + ' ' + ('0' + d.getDate()).slice(-2) + ')');
     document.body.style.overflow = 'hidden';
     $pageWindow.modal('show');
-
     $.get('/rest/pages/' + id).done(function (data) {
         $pageContent.html(data);
         $pageContent.find('img').each(function () {
@@ -98,14 +135,15 @@ $('.page-link').on('click', function (e) {
     }).done(function () {
         addSocialControls(id);
     });
-});
+}
 
 $pageWindow.on('hidden.bs.modal', function () {
     document.body.style.overflow = 'visible';
     $pageContent.html('<div class="pre-loader"></div>');
     $socialControls.html('');
     if (onCancelGoToIndex) {
-        window.location.href = '/';
+        console.log("Popping history state");
+        history.back();
     }
 });
 
@@ -115,7 +153,6 @@ $(document).ready(function () {
         var parts = address.split('/');
         var id = parts[parts.length - 1];
         if (!isNaN(parseFloat(id)) && isFinite(id)) {
-            onCancelGoToIndex = true;
             $('[data-id="' + id + '"]').trigger('click');
         }
     }
