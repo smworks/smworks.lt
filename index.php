@@ -6,7 +6,7 @@
 //	Email: martynas.su@gmail.com
 //------------------------------------------------------------
 
-define(START_TIME, microtime(true));
+define('START_TIME', microtime(true));
 
 // Start session.
 session_start();
