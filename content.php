@@ -40,6 +40,7 @@ class Content extends Singleton
             User::getInstance()->requireAuthentication(function () {
                 $this->displayErrorPage(401, 'Unauthorized access');
             });
+            $this->displayAdminPage();
             exit;
         }
 
@@ -121,6 +122,21 @@ class Content extends Singleton
         echo str_replace(array('{CODE}', '{ERROR}'),
             array($httpCode, $error), $page);
         http_response_code($httpCode);
+    }
+
+    private function displayAdminPage()
+    {
+        $page = $this->loadTemplate('error_page.html');
+        $page = $this->replaceTags($page);
+        echo str_replace(
+            array('{CODE}', '{ERROR}'),
+            array(
+                200,
+                'You are successfully logged in.<br/><br/><a class="btn btn-default" href="/">Go home</a>'
+            ),
+            $page
+        );
+        http_response_code(200);
     }
 
     private function replaceTags($page)
