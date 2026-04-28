@@ -22,6 +22,15 @@ class Content extends Singleton
     public function display()
     {
         if (isset($_GET['image']) && $_GET['image'] && isset($_GET['imageId']) && isset($_FILES['file'])) {
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                http_response_code(405);
+                echo 'Method not allowed';
+                exit;
+            }
+            if (!$this->isAdminSession()) {
+                $this->denyUnauthorizedRestRequest();
+                exit;
+            }
             echo Image::getInstance()->save($_FILES['file']);
             exit;
         }
@@ -40,6 +49,7 @@ class Content extends Singleton
             User::getInstance()->requireAuthentication(function () {
                 $this->displayErrorPage(401, 'Unauthorized access');
             });
+            $_SESSION['is_admin'] = true;
             $this->displayAdminPage();
             exit;
         }
@@ -48,6 +58,7 @@ class Content extends Singleton
             User::getInstance()->requireAuthentication(function () {
                 $this->displayErrorPage(401, 'Unauthorized access');
             });
+            $_SESSION['is_admin'] = true;
             $this->displayEditorWindow($_GET['pageId']);
             exit;
         }
@@ -63,6 +74,10 @@ class Content extends Singleton
                 echo $this->replaceTags(Utils::decodeHTML($content));
                 break;
             case 'PUT':
+                if (!$this->isAdminSession()) {
+                    $this->denyUnauthorizedRestRequest();
+                    break;
+                }
                 parse_str(file_get_contents('php://input'), $_PUT);
                 $_PUT = Utils::encodeHtml($_PUT);
                 if (DB::getInstance()->update('pages SET content=?, summary=?, title=?, thumbnail=?, category=?, visible=? WHERE id=?',
@@ -75,6 +90,10 @@ class Content extends Singleton
                 }
                 break;
             case 'POST':
+                if (!$this->isAdminSession()) {
+                    $this->denyUnauthorizedRestRequest();
+                    break;
+                }
                 if (DB::getInstance()->insert('INSERT INTO pages (content, summary, title, thumbnail, category, visible) VALUES (?, ?, ?, ?, ?, ?)',
                     $_POST['content'], $_POST['summary'], $_POST['title'], $_POST['thumbnail'], $_POST['category'], $_POST['visible'])
                 ) {
@@ -85,6 +104,10 @@ class Content extends Singleton
                 }
                 break;
             case 'DELETE':
+                if (!$this->isAdminSession()) {
+                    $this->denyUnauthorizedRestRequest();
+                    break;
+                }
                 if (DB::getInstance()->delete('DELETE FROM pages WHERE id=?', $pageId)) {
                     echo 'Deleted';
                 } else {
@@ -137,6 +160,17 @@ class Content extends Singleton
             $page
         );
         http_response_code(200);
+    }
+
+    private function isAdminSession()
+    {
+        return isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true;
+    }
+
+    private function denyUnauthorizedRestRequest()
+    {
+        http_response_code(401);
+        echo 'Unauthorized access';
     }
 
     private function replaceTags($page)

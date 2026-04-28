@@ -2,28 +2,46 @@
 
 class Image extends Singleton
 {
+    const ALLOWED_IMAGE_TYPES = array(
+        IMAGETYPE_JPEG => 'jpg',
+        IMAGETYPE_PNG => 'png',
+        IMAGETYPE_GIF => 'gif'
+    );
 
     public function save($file)
     {
         $this->mkdirs();
-        $fileName = $file['name'];
-        $fileType = $file['type'];
-        $fileError = $file['error'];
-        $fileContent = file_get_contents($file['tmp_name']);
-        if (!file_exists('uploads/' . $fileName)) {
-            file_put_contents('uploads/' . $fileName, $fileContent);
+        if (!isset($file['tmp_name']) || !is_uploaded_file($file['tmp_name']) || $file['error'] !== UPLOAD_ERR_OK) {
+            http_response_code(400);
+            return 'Invalid upload';
         }
-        return json_encode(array('location' => 'uploads/' . $fileName), JSON_UNESCAPED_SLASHES);
+
+        $imageType = exif_imagetype($file['tmp_name']);
+        if (!isset(self::ALLOWED_IMAGE_TYPES[$imageType])) {
+            http_response_code(400);
+            return 'Unsupported image type';
+        }
+
+        $fileName = bin2hex(random_bytes(16)) . '.' . self::ALLOWED_IMAGE_TYPES[$imageType];
+        $targetPath = 'uploads/' . $fileName;
+
+        if (!move_uploaded_file($file['tmp_name'], $targetPath)) {
+            http_response_code(500);
+            return 'Failed to store image';
+        }
+
+        return json_encode(array('location' => $targetPath), JSON_UNESCAPED_SLASHES);
     }
 
     public function load($name, $width, $height)
     {
-        $path = 'uploads/' . $name;
+        $safeName = basename($name);
+        $path = 'uploads/' . $safeName;
         if (!file_exists($path)) {
             return false;
         }
 
-        $resizedPath = 'uploads/' . $width . 'x' . $height . '_' . $name . '.jpg';
+        $resizedPath = 'uploads/' . $width . 'x' . $height . '_' . $safeName . '.jpg';
         if (!file_exists($resizedPath)) {
             $this->resize($path, $resizedPath, $width, $height);
         }
@@ -84,8 +102,8 @@ class Image extends Singleton
 
     private function mkdirs()
     {
-        if (!file_exists('images/')) {
-            mkdir('images', 0755, true);
+        if (!file_exists('uploads/')) {
+            mkdir('uploads', 0755, true);
         }
     }
 }
